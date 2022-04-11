@@ -6,7 +6,7 @@
  *
  * Return: Always (Success/correct)
  */
-int main(viod)
+int main(void)
 
 {
 int n;
