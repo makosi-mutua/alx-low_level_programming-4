@@ -1,72 +1,52 @@
 #include "lists.h"
-int len(const char *str);
-list_t *create_node(const char *str);
 
 /**
- * *add_node_end - Adds a new node at the end of the list.
- * @head: beginning of the list.
- * @str: String.
- *
- * Return: Addres of the new element or NULL if failed.
+ * _strlen - find string length
+ * @str: string
+ * Return: length
+ */
+int _strlen(const char *str)
+{
+	int len;
+
+	for (len = 0; str[len] != '\0'; len++)
+		;
+	return (len);
+}
+
+/**
+ * add_node_end - add node to end of linked list
+ * @head: linked list
+ * @str: data for new node
+ * Return: address of new element, or NULL if failed
  */
 list_t *add_node_end(list_t **head, const char *str)
 {
-	list_t *new_node, *temp;
+	list_t *new_node, *tmp; /* create new node */
 
-	temp = *head;
-
-	if (head == NULL)
+	if (str == NULL) /* validate input */
 		return (NULL);
-	new_node = create_node(str);
+	if (strdup(str) == NULL) /* check if malloc errored */
+		return (NULL);
 
+	new_node = malloc(sizeof(list_t)); /* malloc for new node */
 	if (new_node == NULL)
 		return (NULL);
 
-	if (*head == NULL)
-	{
-		*head = new_node;
-		return (*head);
-	}
-
-	while (temp->next != NULL)
-	{
-		temp = temp->next;
-	}
-	temp->next = new_node;
-
-	return (*head);
-}
-
-/**
- * len - Calculates the length of teh string.
- * @str: string.
- * Return: The length of the string.
- */
-int len(const char *str)
-{
-	int i;
-
-	if (str == NULL)
-		return (0);
-	for (i = 0; str[i] != '\0'; i++)
-		;
-	return (i);
-}
-/**
- * create_node - Creates a new node
- * @str: String to add to the node.
- * Return: A pointer to the allocated memory.
- */
-list_t *create_node(const char *str)
-{
-	list_t *new_node;
-
-	new_node = malloc(sizeof(list_t));
-	if (new_node == NULL)
-		return (NULL);
-	new_node->str = strdup(str);
-	new_node->len = len(str);
+	new_node->str = strdup(str); /* set node values */
+	new_node->len = _strlen(str);
 	new_node->next = NULL;
+
+	if (*head == NULL) /* if no list nodes, set new_node to beginning */
+		*head = new_node;
+	else
+	{
+		tmp = *head;
+
+		while (tmp->next != NULL)
+			tmp = tmp->next;
+		tmp->next = new_node;
+	}
 
 	return (new_node);
 }
